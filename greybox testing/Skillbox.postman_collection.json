@@ -1,0 +1,116 @@
+{
+	"info": {
+		"_postman_id": "5a72353d-6154-4069-b3eb-86bdf70866fc",
+		"name": "Skillbox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Создание продукта",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function randomInt(min, max) {",
+							"\treturn min + Math.floor((max - min) * Math.random());",
+							"}",
+							"",
+							"",
+							"ts = Date.now()",
+							"name = \"test_\" + ts",
+							"description = name",
+							"manage_stock = Boolean(Math.round(Math.random()));",
+							"stock_quantity = randomInt( 1, 100)",
+							"price = randomInt( 100, 1000)",
+							"sale_price =  Math.floor(0.9 * price)",
+							"",
+							"",
+							"",
+							"pm.environment.set(\"name\", name);",
+							"pm.environment.set(\"slug\", name);",
+							"pm.environment.set(\"description\", description);",
+							"pm.environment.set(\"manage_stock\", manage_stock);",
+							"pm.environment.set(\"stock_quantity\", stock_quantity);",
+							"pm.environment.set(\"price\", price);",
+							"pm.environment.set(\"regular_price\", price);",
+							"pm.environment.set(\"sale_price\", sale_price);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"product = JSON.parse(responseBody);",
+							"",
+							"pm.expect(pm.environment.get(\"name\")).to.equal(product.name);",
+							"pm.expect(pm.environment.get(\"slug\")).to.equal(product.slug);",
+							"pm.expect(pm.environment.get(\"manage_stock\")).to.equal(product.manage_stock);",
+							"pm.expect(pm.environment.get(\"stock_quantity\")).to.equal(product.stock_quantity);",
+							"pm.expect(pm.environment.get(\"description\")).to.equal(product.description);",
+							"pm.expect(pm.environment.get(\"price\")).to.equal(product.price);",
+							"pm.expect(pm.environment.get(\"regular_price\")).to.equal(product.regular_price);",
+							"pm.expect(pm.environment.get(\"sale_price\")).to.equal(product.sale_price);",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "iamfinallytester",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "skillboxadmin",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"{{name}}\",\n    \"slug\": \"{{slug}}\",\n    \"manage_stock\": {{manage_stock}},\n    \"stock_quantity\": {{stock_quantity}},\n    \"description\": \"{{description}}\",\n    \"price\": \"{{price}}\",\n    \"regular_price\": \"{{regular_price}}\",\n    \"sale_price\": \"{{sale_price}}\",\n    \"images\": [\n        {\n            \"src\": \"https://i.ebayimg.com/images/g/3XUAAOSwhuxatCCi/s-l1600.jpg\"\n        }\n    ],\n    \"categories\": [\n        {\n            \"id\": 19,\n            \"name\": \"Каталог\",\n            \"slug\": \"catalog\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/products",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"products"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
